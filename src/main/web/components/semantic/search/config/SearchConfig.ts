@@ -658,6 +658,11 @@ export interface SemanticFacetConfig {
    * @default false
    */
   openByDefault?: boolean;
+  /**
+   * Selection to sort value resuls.
+   *
+   */
+  sortby?: string;
 
   /**
    * Flag to select first category in the categories filter by default.

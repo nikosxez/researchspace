@@ -169,7 +169,7 @@ export class FacetStore {
       setBaseQuery: this.setBaseQuery,
       removeConjunct: this.removeConjunct,
     };
-
+    const selectedSort = config.config.sortby;
     const categories = this.config.searchProfileStore
       .rangesFor(this.config.domain)
       .map(this.buildFacetCategoryBinding) as Categories;
@@ -218,7 +218,7 @@ export class FacetStore {
 
         if (selectedValues.isEmpty()) {
           // clean up disjunct if we deselected all values for the given relation
-          this.selectedValues(selected.remove(value.relation))
+          this.selectedValues(selected.remove(value.relation));
         } else {
           this.selectedValues(selected.set(value.relation, selectedValues));
         }
@@ -312,6 +312,20 @@ export class FacetStore {
         }
         facetValues
           .onValue((facetValues) => {
+            if (selectedSort === 'count-desc')
+              facetValues.sort(function (a, b) {
+                // Sort by count (most results first)
+                // if this fails i.e. no count value exists
+                // it just does not sort the array..
+                return parseFloat(b.tuple.count.value) - parseFloat(a.tuple.count.value);
+              });
+            else if (selectedSort === 'count-asc')
+              facetValues.sort(function (a, b) {
+                // Sort by count (most results first)
+                // if this fails i.e. no count value exists
+                // it just does not sort the array..
+                return parseFloat(a.tuple.count.value) - parseFloat(b.tuple.count.value);
+              });
             this.values({ values: facetValues, loading: false, error: false });
             this.valuesCache = { [relationIri]: facetValues };
             trigger({ eventType: BuiltInEvents.ComponentLoaded, source: config.config.id });
