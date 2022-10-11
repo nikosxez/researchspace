@@ -64,7 +64,7 @@ export class DatePickerInput extends AtomicValueInput<DatePickerInputProps, {}> 
     //    as if current time zone was UTC+00;
     // 2. after date picker returns changed Momeent value we should
     //    convert it back using `localMomentAsIfItWasUtc()`
-    const localMoment = utcMomentAsIfItWasLocal(utcMoment);
+    const localMoment = localMomentAsIfItWasUtc(utcMoment);
 
     const mode = this.props.mode || getModeFromDatatype(this.datatype);
 
